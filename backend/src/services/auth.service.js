@@ -116,6 +116,7 @@ const verifyEmail = async (reqBody, reqQuery) => {
   }
 };
 
+
 const verifyNumber = async (phoneNumber, otpCode, email) => {
   console.log("reqBody", email);
   console.log("reqQuery", otpCode);

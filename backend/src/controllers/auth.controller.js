@@ -20,7 +20,7 @@ const register = catchAsync(async (req, res) => {
         firstName,
         lastName,
         email,
-        ...rest
+        ...rest,
       });
     } else if (!isUser.isEmailVerified) {
       await userService.isUpdateUser(isUser.id, {
@@ -42,7 +42,6 @@ const register = catchAsync(async (req, res) => {
       ...rest
     });
   }
-
   res.status(httpStatus.CREATED).json(
     response({
       message: "Thank you for registering. Please verify your email",

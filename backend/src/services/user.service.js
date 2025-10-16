@@ -1,98 +1,93 @@
-const httpStatus = require("http-status");
-const { User } = require("../models");
-const ApiError = require("../utils/ApiError");
-const { sendEmailVerification } = require("./email.service");
-const unlinkImages = require("../common/unlinkImage");
+const httpStatus = require('http-status')
+const { User } = require('../models')
+const ApiError = require('../utils/ApiError')
+const { sendEmailVerification } = require('./email.service')
+const unlinkImages = require('../common/unlinkImage')
 
 const createUser = async (userBody) => {
+  console.log("create user service called")
   if (await User.isEmailTaken(userBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken')
   }
-  const oneTimeCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+  const oneTimeCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
 
-  if (userBody.role === "user" || userBody.role === "admin") {
+  await sendEmailVerification(userBody.email, oneTimeCode)
 
-    sendEmailVerification(userBody.email, oneTimeCode);
-  }
-  return User.create({ ...userBody, oneTimeCode });
-};
-
-
+  console.log('ontime code ', oneTimeCode)
+  return User.create({ ...userBody, oneTimeCode })
+}
 
 const queryUsers = async (filter, options) => {
-  const query = {};
+  const query = {}
 
   // Loop through each filter field and add conditions if they exist
   for (const key of Object.keys(filter)) {
     if (
-      (key === "fullName" || key === "email" || key === "username") &&
-      filter[key] !== ""
+      (key === 'fullName' || key === 'email' || key === 'username') &&
+      filter[key] !== ''
     ) {
-      query[key] = { $regex: filter[key], $options: "i" }; // Case-insensitive regex search for name
-    } else if (filter[key] !== "") {
-      query[key] = filter[key];
+      query[key] = { $regex: filter[key], $options: 'i' } // Case-insensitive regex search for name
+    } else if (filter[key] !== '') {
+      query[key] = filter[key]
     }
   }
 
-  const users = await User.paginate(query, options);
+  const users = await User.paginate(query, options)
 
   // Convert height and age to feet/inches here...
 
-  return users;
-};
-
-
+  return users
+}
 
 const getUserById = async (id) => {
-  return User.findById(id);
-};
+  return User.findById(id)
+}
 
 const getUserByEmail = async (email) => {
-  return User.findOne({ email });
-};
+  return User.findOne({ email })
+}
 
 const updateUserById = async (userId, updateBody, files) => {
-  const user = await getUserById(userId);
+  const user = await getUserById(userId)
 
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
   }
 
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken')
   }
 
   if (files && files.length > 0) {
-    updateBody.photo = files;
+    updateBody.photo = files
   } else {
-    delete updateBody.photo; // remove the photo property from the updateBody if no new photo is provided
+    delete updateBody.photo // remove the photo property from the updateBody if no new photo is provided
   }
 
-  Object.assign(user, updateBody);
-  await user.save();
-  return user;
-};
+  Object.assign(user, updateBody)
+  await user.save()
+  return user
+}
 
 const deleteUserById = async (userId) => {
-  const user = await getUserById(userId);
+  const user = await getUserById(userId)
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
   }
-  await user.remove();
-  return user;
-};
+  await user.remove()
+  return user
+}
 
 const isUpdateUser = async (userId, updateBody) => {
-  const user = await getUserById(userId);
+  const user = await getUserById(userId)
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
   }
 
-  const oneTimeCode =
-    Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+  const oneTimeCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
 
-  if (updateBody.role === "user" || updateBody.role === "admin") {
-    sendEmailVerification(updateBody.email, oneTimeCode);
+  if (updateBody.role === 'user' || updateBody.role === 'admin') {
+    sendEmailVerification(updateBody.email, oneTimeCode)
   }
 
   Object.assign(user, updateBody, {
@@ -102,10 +97,10 @@ const isUpdateUser = async (userId, updateBody) => {
     isResetPassword: false,
     isPhoneNumberVerified: false,
     oneTimeCode: oneTimeCode,
-  });
-  await user.save();
-  return user;
-};
+  })
+  await user.save()
+  return user
+}
 
 module.exports = {
   createUser,
@@ -114,5 +109,5 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
-  isUpdateUser
-};
+  isUpdateUser,
+}
