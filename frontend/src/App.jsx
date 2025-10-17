@@ -5,14 +5,14 @@ import Login from './pages/Login'
 import Profile from './pages/Profile'
 
 const App = () => {
-  return <>
+  return <div className="bg-[url('./assets/bgImage.svg')] bg-contain">
     <Routes>
       <Route path='/' element={<Home/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/profile' element={<Profile/>}/>
     </Routes>
     
-    </>
+    </div>
 }
 
 export default App
