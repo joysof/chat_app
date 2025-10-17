@@ -1,11 +1,20 @@
 const httpStatus = require('http-status')
 const ApiError = require('../utils/ApiError')
-const Message = require('../models')
+const {Message, User} = require('../models')
+const { getUserById } = require('./user.service')
 
-const createMessage = async (messageBody , file) =>{
-    const {senderId ,receiverId,message} = messageBody;
+const createMessage = async (senderId , receiverId ,message , file) =>{
     if (!senderId || !receiverId) {
         throw new ApiError(httpStatus.BAD_REQUEST , "sender or Reciver id not found")
+    }
+    const sender = await getUserById(senderId)
+    const reciver = await getUserById(receiverId)
+
+    if (!sender) {
+        throw new ApiError(httpStatus.NOT_FOUND , "send user not found")
+    }
+    if (!reciver) {
+        throw new ApiError(httpStatus.NOT_FOUND , "reciver  user not found")
     }
     let imageUrl = null 
     if(file){
