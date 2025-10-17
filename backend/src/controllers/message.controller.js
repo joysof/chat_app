@@ -22,4 +22,23 @@ const sendMessage = catchAsync(async(req,res) =>{
     )
 })
 
-module.exports ={sendMessage}
+
+const getMessage = catchAsync(async(req ,res) =>{
+    const { senderId, receiverId } = req.query;
+    const data = await messageService.getMessageBetweenUsers(senderId , receiverId)
+
+      res.status(httpStatus.OK).json(
+    response({
+      message: "Messages fetched successfully",
+      status: "OK",
+      statusCode: httpStatus.OK,
+      data
+    })
+  );
+})
+
+module.exports =
+{
+    sendMessage,
+    getMessage,
+}

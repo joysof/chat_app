@@ -3,7 +3,9 @@ const ApiError = require('../utils/ApiError')
 const {Message, User} = require('../models')
 const { getUserById } = require('./user.service')
 
+
 const createMessage = async (senderId , receiverId ,message , file) =>{
+
     if (!senderId || !receiverId) {
         throw new ApiError(httpStatus.BAD_REQUEST , "sender or Reciver id not found")
     }
@@ -29,6 +31,25 @@ const createMessage = async (senderId , receiverId ,message , file) =>{
     return newMessage
 }
 
+const getMessageBetweenUsers = async(senderId , receiverId)=>{
+    const message = await Message.find({
+        $or:[
+            {senderId , receiverId},
+            {senderId : receiverId , receiverId : senderId},
+        ],
+    }).sort({createAt : 1})
+
+    return message
+}
+const deleteMessage = async(messageId) =>{
+    const message = await Message.findById(messageId)
+    if (!message) {
+        throw new ApiError(httpStatus.NOT_FOUND,"Message not found")
+
+    }
+    
+}
 module.exports ={
-    createMessage
+    createMessage,
+    getMessageBetweenUsers
 }
