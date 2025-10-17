@@ -10,8 +10,10 @@ const sendMessage = catchAsync(async(req,res) =>{
       const message = req.body.message
 
     const data = await messageService.createMessage(senderId , receiverId ,message, file)
-  
-
+    if (global.io) {
+        global.io.to(`romm${receiverId}`).emit("new-message" , data)
+    }
+    
     res.status(httpStatus.CREATED).json(
         response({
             message : "Message sent successfully",

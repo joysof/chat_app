@@ -8,9 +8,9 @@ const socketIO = (io) => {
       //console.log('someone wants to join--->', data);
       if (data?.roomId) {
         socket.join("room" + data.roomId);
-        callback("Join room successful");
+       callback && callback("Join room successful");
       } else {
-        callback("Must provide a valid user id");
+      callback &&  callback("Must provide a valid user id");
       }
     });
 
