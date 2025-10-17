@@ -36,9 +36,22 @@ const getMessage = catchAsync(async(req ,res) =>{
     })
   );
 })
+const deleteMessage = catchAsync(async(req,res)=>{
+    const data = await messageService.deleteMessage(req.params.id)
+    
+res.status(httpStatus.OK).json(
+    response({
+      message: "Message deleted successfully",
+      status: "OK",
+      statusCode: httpStatus.OK,
+      data
+    })
+  );
+})
 
 module.exports =
 {
     sendMessage,
     getMessage,
+    deleteMessage
 }

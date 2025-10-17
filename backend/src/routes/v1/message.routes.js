@@ -6,6 +6,7 @@ const messageRoute = express.Router()
 
 messageRoute.post('/' , auth() ,messageController.sendMessage)
 messageRoute.get('/' , auth() , messageController.getMessage)
+messageRoute.delete('/:id' , auth() , messageController.deleteMessage)
 
 
 module.exports = messageRoute

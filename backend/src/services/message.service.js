@@ -47,9 +47,11 @@ const deleteMessage = async(messageId) =>{
         throw new ApiError(httpStatus.NOT_FOUND,"Message not found")
 
     }
-    
+    await message.deleteOne()
+    return message
 }
 module.exports ={
     createMessage,
-    getMessageBetweenUsers
+    getMessageBetweenUsers,
+    deleteMessage
 }
