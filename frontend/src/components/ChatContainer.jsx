@@ -10,11 +10,12 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
   if (scrollEnd.current) {
     scrollEnd.current.scrollIntoView({ behavior: "smooth" });
   }
-}, []);
+}, [messagesDummyData]);
 
 
   return selectedUser? (
-    <div className='h-full overflow-scroll relative backdrop-blur-lg'>
+    <div className='h-full overflow-scroll relative backdrop-blur-lg flex flex-col'>
+    <div >
       {/* hearContent  */}
       <div className='flex items-center gap-3 mx-4 border-b border-stone-500 '>
         <img src={assets.profile_martin} alt=""  className='w-8 rounded-full'/>
@@ -27,9 +28,9 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
 
 
     {/* chat area  */}
-
+    
     {messagesDummyData.map((msg ,index) =>(
-      <div key={index} className={`flex items-end gap-2 justify-end ${msg.senderId !== '680f50e4f10f3cd28382ecf9' && 'flex-row-reverse'}`}>
+      <div key={index} className={`flex items-end gap-2 justify-end  overflow-y-auto px-4 pt-4  ${msg.senderId !== '680f50e4f10f3cd28382ecf9' && 'flex-row-reverse'}`}>
         {msg.image ? (
           // message img 
           <img src={msg.image} alt="" className='max-w-[230px] border border-gray-700 rounded-lg overflow-hidden mb-8' />
@@ -46,13 +47,17 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
       </div>
     ))}
 
-    <div ref={scrollEnd}>
-
+    <div ref={scrollEnd}></div>
     </div>
-
-
-
-
+    
+    <div className='sticky bottom-0 left-0 right-0 flex items-center gap-3 p-3'>
+      <div className='flex-1 flex items-center bg-gray-100/12 px-3 rounded-full'>
+        <input className='flex-1 text-sm border-none py-2 rounded-lg outline-none text-white placeholder-gray-400' type="text" placeholder='send a message' />
+        <input type="file" id='image' accept='image/png , image/jpeg' hidden />
+        <label htmlFor="image"><img src={assets.gallery_icon} className='w-5 mr-2 cursor-pointer' alt="" /></label>
+      </div>
+      <img src={assets.send_button} className='w-7 cursor-pointer' alt="" />
+    </div>
     </div>
   ): (
     // not selectedUser then show 
