@@ -5,19 +5,26 @@ import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [currentState , setCurrentState] = useState("Sing Up")
-  const [fullName , setFullName] = useState()
+  const [firstName, setfirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email , setEmail] = useState('')
   const [Password , setPassword] = useState('')
   const [bio , setBio] = useState('')
-  const {login } = useContext(AuthContext)
+  const {login , register} = useContext(AuthContext)
   const [isDataSubmitted , setIsDataSubmitted] = useState(false)
 
   const navigate = useNavigate()
 
   const onsubmitHandler = (e) =>{
     e.preventDefault()
-    login(email , Password)
-    navigate('/')
+    if (currentState === "Sing Up") {
+      register(firstName , lastName , email , Password)
+      navigate('/profile')
+    }else{
+      login(email , Password)
+      navigate('/')
+    }
+    
     if (currentState === 'Sing Up' && !isDataSubmitted) {
       setIsDataSubmitted(true)
       return
@@ -38,9 +45,15 @@ const Login = () => {
              )} 
             </h2>
             {currentState === 'Sing Up' && !isDataSubmitted &&(
-                <input
-                onChange={(e) =>setFullName(e.target.value)} value={fullName}
-                type="text" className=' p-2 border border-gray-500 rounded-md focus:outline-none' placeholder='Full Name' required />
+              <>
+              <input
+                onChange={(e) =>setfirstName(e.target.value)} value={firstName}
+                type="text" className=' p-2 border border-gray-500 rounded-md focus:outline-none' placeholder='Frist Name' required />
+              <input
+                onChange={(e) =>setLastName(e.target.value)} value={lastName}
+                type="text" className=' p-2 border border-gray-500 rounded-md focus:outline-none' placeholder='Last Name' required />
+              </>
+                
             )}
             {
               !isDataSubmitted && (
