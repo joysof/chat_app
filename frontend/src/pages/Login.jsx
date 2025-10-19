@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import assets from '../assets/assets'
+import { AuthContext } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [currentState , setCurrentState] = useState("Sing Up")
@@ -7,11 +9,15 @@ const Login = () => {
   const [email , setEmail] = useState('')
   const [Password , setPassword] = useState('')
   const [bio , setBio] = useState('')
-
+  const {login } = useContext(AuthContext)
   const [isDataSubmitted , setIsDataSubmitted] = useState(false)
+
+  const navigate = useNavigate()
 
   const onsubmitHandler = (e) =>{
     e.preventDefault()
+    login(email , Password)
+    navigate('/')
     if (currentState === 'Sing Up' && !isDataSubmitted) {
       setIsDataSubmitted(true)
       return
