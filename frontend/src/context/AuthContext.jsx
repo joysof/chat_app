@@ -37,7 +37,7 @@ export const AuhtProvider = ({children}) =>{
             const registeredEmail = res.data.data?.email || email
             localStorage.setItem("email", registeredEmail?.trim().toLowerCase())
             console.log(registeredEmail)
-            // navigate("/verify-email")
+            navigate("/verify-email")
         } catch (error) {
             console.log(error)
         }

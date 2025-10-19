@@ -2,12 +2,13 @@ import React, { useContext} from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 
 const EmailVerify = () => {
   const inputRefs = React.useRef([])
-  const { backend_url , navigate} = useContext(AuthContext) 
-  
+  const { backend_url} = useContext(AuthContext) 
+  const navigate = useNavigate()
   const handleInput = (e , index) =>{
     if (e.target.value.length > 0 && index < inputRefs.current.length - 1) {
         inputRefs.current[index + 1].focus()      
@@ -35,12 +36,12 @@ const EmailVerify = () => {
         const code = otpArray.join('')
         const email = localStorage.getItem("email");
         console.log(email)
-        const {data} = await axios.post(`${backend_url}/api/v1/auth/verify-email`, {email,code})
-        if (data.success) {
-          toast.success(data.message)
+        const res = await axios.post(`${backend_url}/api/v1/auth/verify-email`, {email,code})
+        if (res.data.code===200) {
+          toast.success(res.message)
           navigate('/')
         }else{
-          toast.error(data.message)
+          toast.error(res.message)
         }
     } catch (error) {
       toast.error(error.message)
