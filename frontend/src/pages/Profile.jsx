@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 const Profile = () => {
   const [selectedImg, setSelectedImg] = useState(null)
   const [name, setName] = useState('Your name')
-  const [bio, setBio] = useState('Hi iam using chat')
   const navigate = useNavigate()
 
 
@@ -47,14 +46,6 @@ const Profile = () => {
             placeholder="your name "
             className=" p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-400"
           />
-          <textarea
-            onChange={(e) => setBio(e.target.value)}
-            value={bio}
-            roles="4"
-            className="p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Write profile bio "
-            
-          ></textarea>
           <button className='py-3 bg-gradient-to-r from-purple-400 to-violet-600 text-white rounded-md cursor-pointer' type='submit'>save</button>
         </form>
         <img src={assets.logo_icon} className='max-w-44 aspect-square rounded-full mx-10 max-sm:mt-10 ' alt="" />

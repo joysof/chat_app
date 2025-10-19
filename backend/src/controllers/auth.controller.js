@@ -47,7 +47,7 @@ const register = catchAsync(async (req, res) => {
       message: "Thank you for registering. Please verify your email",
       status: "OK",
       statusCode: httpStatus.CREATED,
-      data: {},
+      data: {email},
     })
   );
 });

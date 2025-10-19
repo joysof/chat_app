@@ -9,7 +9,6 @@ const Login = () => {
   const [lastName, setLastName] = useState('')
   const [email , setEmail] = useState('')
   const [Password , setPassword] = useState('')
-  const [bio , setBio] = useState('')
   const {login , register} = useContext(AuthContext)
   const [isDataSubmitted , setIsDataSubmitted] = useState(false)
 
@@ -19,7 +18,7 @@ const Login = () => {
     e.preventDefault()
     if (currentState === "Sing Up") {
       register(firstName , lastName , email , Password)
-      navigate('/profile')
+      navigate('/verify-email')
     }else{
       login(email , Password)
       navigate('/')
@@ -62,14 +61,6 @@ const Login = () => {
                 <input type="password" placeholder='password' required className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500' onChange={(e) =>setPassword(e.target.value) } value={Password}/>
                 </>
               )}
-              {
-                currentState === 'Sing Up' && isDataSubmitted && (
-                  <textarea onChange={(e)=>setBio(e.target.value)} value={bio} role='4' className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500' placeholder='Provide a  Short bio...' required>
-
-                  </textarea>
-
-                )
-              }
             <button type='submit' className='py-3 bg-gradient-to-r from-purple-400 to-violet-600 text-white rounded-md cursor-pointer'>{currentState === 'Sing Up' ? "Create Accout" : "Login Now"}</button>
 
             <div className='flex items-center gap-2 text-sm text-gray-500'>
