@@ -38,13 +38,12 @@ const EmailVerify = () => {
         console.log(email)
         const res = await axios.post(`${backend_url}/api/v1/auth/verify-email`, {email,code})
         if (res.data.code===200) {
-          toast.success(res.message)
+          toast.success(res.data.message)
           navigate('/')
-        }else{
-          toast.error(res.message)
         }
     } catch (error) {
-      toast.error(error.message)
+      const errorMsg = error.response?.data?.message || "something went wrong place try agin "
+      toast.error(errorMsg)
       console.log(error)
     }
   }
