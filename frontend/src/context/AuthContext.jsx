@@ -2,6 +2,7 @@ import { createContext, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useEffect } from 'react'
 
 export const AuthContext = createContext()
 
@@ -11,9 +12,20 @@ export const AuhtProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null)
   const navigate = useNavigate()
   const [loading, setLoding] = useState(false)
-
+  const [users ,setUsers] = useState('')
   const backend_url = import.meta.env.VITE_BACKEND_URL
 
+  useEffect(() =>{
+    const fetchUsers = async () =>{
+      const token = localStorage.getItem('token')
+      const res = await axios.get(`${backend_url}/api/v1/users`,{
+        headers :{Authorization : `Bearer ${token}`}
+      })
+      setUsers(res.data.data)
+
+    }
+    fetchUsers()
+  },[])
   const login = async (email, password) => {
     setLoding(true)
     try {
@@ -70,6 +82,7 @@ export const AuhtProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        users,
         token,
         loading,
         register,

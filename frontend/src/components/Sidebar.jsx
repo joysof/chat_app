@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
 import {useNavigate} from 'react-router-dom'
-import assets, { userDummyData } from '../assets/assets'
+import assets from '../assets/assets'
 import { AuthContext } from '../context/AuthContext'
 const Sidebar = ({selectedUser,setSelectedUser}) => {
 const navigate = useNavigate()
-const {logout} = useContext(AuthContext)
-
+const {logout , user ,users} = useContext(AuthContext)
+  console.log("all user" ,users)
   return (
     <div className={`bg-[#8185b2]/10 h-full rounded-r-xl overflow-y-scroll text-white ${selectedUser ? 'max-md:hidden' : ''}`}>
       <div className='pb-5'>
@@ -31,11 +31,12 @@ const {logout} = useContext(AuthContext)
 
         <div className='flex flex-col'>
           {/* user data  */}
-          {userDummyData.map((user , index) =>(
+          {Array.isArray(users?.attributes?.results) && users?.attributes?.results.map((user , index) =>(
             <div onClick={() =>{setSelectedUser(user)}} key={index} className= {`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${selectedUser?._id === user._id && 'bg-[#282142]/50'}`}>
               <img src={user.profilePic || assets.avatar_icon } className='w-[35px] aspect-[1/1] rounded-full' alt="" />
               <div className='flex flex-col leading-5'>
-                <p>{user.fullName}</p>
+                <p>{console.log("user " ,user)}</p>
+                <p>{user.firstName}{ user.lastName}</p>
                 {
                 index < 3
                 ? <span className='text-green-400 text-sm'>Online</span>
