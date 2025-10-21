@@ -9,6 +9,21 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
   const scrollEnd = useRef()
 
   const {message , getMessage} = useContext(MessageContext)
+
+  useEffect(() =>{
+    if (selectedUser && user) {
+      getMessage(user._id , selectedUser._id)      
+    }
+  },[selectedUser , user])
+
+
+
+
+
+
+
+
+
   useEffect(() => {
   if (scrollEnd.current) {
     scrollEnd.current.scrollIntoView({ behavior: "smooth" });
@@ -44,7 +59,7 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
         )}
         {/* user profile icon and time  */}
         <div className='text-center text-sm'>
-          <img src={msg.senderId === '680f50e4f10f3cd28382ecf9' ? assets.avatar_icon : assets.profile_martin} alt="" className='w-7 rounded-full' />
+          <img src={msg.senderId === user._id ? assets.avatar_icon : assets.profile_martin} alt="" className='w-7 rounded-full' />
           <p className='text-gray-500'>{ formatMessagetime(msg.createdAt)} </p>
         </div>
         
