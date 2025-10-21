@@ -4,9 +4,11 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import EmailVerify from './pages/VerifyEmail'
+  import { ToastContainer} from 'react-toastify';
 
 const App = () => {
   return <div className="bg-[url('./assets/bgImage.svg')] bg-contain">
+    <ToastContainer/>
     <Routes>
       <Route path='/' element={<Home/>}/>
       <Route path='/login' element={<Login/>}/>

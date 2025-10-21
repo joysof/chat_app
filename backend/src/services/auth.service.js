@@ -12,6 +12,7 @@ const loginUserWithEmailAndPassword = async (email, password, fcmToken) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password");
   }
   user.fcmToken = fcmToken;
+  console.log("api hit")
   await user.save();
   return user;
 };

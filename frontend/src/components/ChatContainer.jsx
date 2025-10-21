@@ -1,16 +1,19 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import assets, { messagesDummyData } from '../assets/assets'
 import { formatMessagetime } from '../lib/utils'
+import { MessageContext } from '../context/MessageContaxt'
+import { AuthContext } from '../context/AuthContext'
 
 export const ChatContainer = ({selectedUser,setSelectedUser}) => {
-
+  const {user} = useContext(AuthContext)
   const scrollEnd = useRef()
 
+  const {message , getMessage} = useContext(MessageContext)
   useEffect(() => {
   if (scrollEnd.current) {
     scrollEnd.current.scrollIntoView({ behavior: "smooth" });
   }
-}, [messagesDummyData]);
+}, [message]);
 
 
   return selectedUser? (
@@ -29,14 +32,15 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
 
     {/* chat area  */}
     
-    {messagesDummyData.map((msg ,index) =>(
-      <div key={index} className={`flex items-end gap-2 justify-end  overflow-y-auto px-4 pt-4  ${msg.senderId !== '680f50e4f10f3cd28382ecf9' && 'flex-row-reverse'}`}>
+    {message.map((msg ,index) =>(
+      <div key={index} className={`flex items-end gap-2 justify-end  overflow-y-auto px-4 pt-4  ${msg.senderId !== user?._id
+ && 'flex-row-reverse'}`}>
         {msg.image ? (
           // message img 
           <img src={msg.image} alt="" className='max-w-[230px] border border-gray-700 rounded-lg overflow-hidden mb-8' />
         ):(
           // message text 
-          <p className={`p-2 max-w-[200px] md:text-sm font-light rounded-lg mb-8 break-all bg-violet-500/30 text-white ${msg.senderId !== '680f50e4f10f3cd28382ecf9' ? ' rounded-br-none' : ' rounded-bl-none'}`}>{msg.text}</p>
+          <p className={`p-2 max-w-[200px] md:text-sm font-light rounded-lg mb-8 break-all bg-violet-500/30 text-white ${msg.senderId !== user?._id ? ' rounded-br-none' : ' rounded-bl-none'}`}>{msg.text}</p>
         )}
         {/* user profile icon and time  */}
         <div className='text-center text-sm'>

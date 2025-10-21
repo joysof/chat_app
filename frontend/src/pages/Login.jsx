@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import assets from '../assets/assets'
 import { AuthContext } from '../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [currentState , setCurrentState] = useState("Sing Up")
@@ -9,10 +8,9 @@ const Login = () => {
   const [lastName, setLastName] = useState('')
   const [email , setEmail] = useState('')
   const [Password , setPassword] = useState('')
-  const {login , register} = useContext(AuthContext)
+  const {login , register,navigate} = useContext(AuthContext)
   const [isDataSubmitted , setIsDataSubmitted] = useState(false)
 
-  const navigate = useNavigate()
 
   const onsubmitHandler = (e) =>{
     e.preventDefault()
@@ -21,7 +19,6 @@ const Login = () => {
       navigate('/verify-email')
     }else{
       login(email , Password)
-      navigate('/')
     }
     
     if (currentState === 'Sing Up' && !isDataSubmitted) {

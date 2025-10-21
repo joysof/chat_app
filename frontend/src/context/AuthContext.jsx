@@ -1,16 +1,19 @@
 import { createContext, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export const AuthContext = createContext()
 
 export const AuhtProvider = ({ children }) => {
+
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(localStorage.getItem('token') || null)
   const navigate = useNavigate()
   const [loading, setLoding] = useState(false)
 
   const backend_url = import.meta.env.VITE_BACKEND_URL
+
   const login = async (email, password) => {
     setLoding(true)
     try {
@@ -24,14 +27,18 @@ export const AuhtProvider = ({ children }) => {
         'token',
         res.data.data.attributes.tokens.access.token
       )
+      toast.success(res.data.message || "Login successful")
+      navigate('/')
     } catch (error) {
-      console.log(error)
+      const errorMsg =
+        error.response?.data?.message || "Login failed! Please try again.";
+      toast.error(errorMsg)
     } finally {
       setLoding(false)
     }
   }
 
-  const register = async (firstName, lastName, email, password, bio) => {
+  const register = async (firstName, lastName, email, password) => {
     setLoding(true)
     try {
       const res = await axios.post(`${backend_url}/api/v1/auth/register`, {
@@ -39,7 +46,6 @@ export const AuhtProvider = ({ children }) => {
         lastName,
         email,
         password,
-        bio,
       })
       const user = res.data.data.attributes.user
       setUser(user)
@@ -51,15 +57,24 @@ export const AuhtProvider = ({ children }) => {
       console.log(error)
     }
   }
-  const logout = async () =>{
+  const logout = async () => {
     setUser(null)
     setToken(null)
-    localStorage.removeItem("token")
+    localStorage.removeItem('token')
     navigate('/login')
   }
   return (
     <AuthContext.Provider
-      value={{ user, token, loading, register, login, backend_url , logout }}
+      value={{
+        user,
+        token,
+        loading,
+        register,
+        login,
+        navigate,
+        backend_url,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>
