@@ -33,12 +33,9 @@ export const AuhtProvider = ({ children }) => {
         email,
         password,
       })
-      setUser(res.data.data.attributes.user)
-      setToken(res.data.data.attributes.tokens)
-      localStorage.setItem(
-        'token',
-        res.data.data.attributes.tokens.access.token
-      )
+    const accessToken = res.data.data.attributes.tokens.access.token
+    setToken(accessToken)
+    localStorage.setItem('token', accessToken)
       toast.success(res.data.message || "Login successful")
       navigate('/')
     } catch (error) {

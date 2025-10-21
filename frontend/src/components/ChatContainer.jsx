@@ -20,7 +20,7 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
 
   useEffect(() =>{
     if (selectedUser && user) {
-      getMessage(user._id , selectedUser._id)      
+      getMessage(user._id || user.id , selectedUser._id || selectedUser.id)      
     }
   },[selectedUser , user])
 

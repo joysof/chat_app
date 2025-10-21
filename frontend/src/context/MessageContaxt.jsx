@@ -11,12 +11,14 @@ export const MessageProvider = ({ children }) => {
   const [loading, setLoding] = useState(false)
   const [socket, setSocket] = useState(null)
   const backend_url = import.meta.env.VITE_BACKEND_URL
-  const { user } = useContext(AuthContext)
+  const { user ,token } = useContext(AuthContext)
 
   useEffect(() => {
-    if (user?.token) {
+
+    if(!token) return;
+    if (token) {
       const newSocket = io(backend_url, {
-        auth: { token: user.token },
+        auth: { token:token },
       })
       newSocket.on('connect', () => {
         console.log('conected to socket server')
@@ -28,9 +30,10 @@ export const MessageProvider = ({ children }) => {
       setSocket(newSocket)
       return () => newSocket.disconnect()
     }
-  }, [user?.token])
+  }, [token])
 
   const getMessage = async (senderId, receiverId) => {
+    if(!token) return
     setLoding(true)
     try {
       const res = await axios.get(`${backend_url}/api/v1/message`, {
