@@ -68,8 +68,20 @@ export const MessageProvider = ({ children, user }) => {
     }
   }
 
+  const deleteMessage = async(messageId) =>{
+    try {
+        const res = axios.delete(`${backend_url}/api/v1/message/${messageId}`,
+            { headers: { Authorization: `Bearer ${user.token}` } }
+        )
+        setMessage((prev) => prev.filter((m) => m._id !== messageId))
+        toast.success(res.data.message || "Message deleted successfully")
+    } catch (error) {
+        toast.error(error.response?.data?.message || "Tailed to delete message")
+    }
+  }
+
   return (
-    <MessageContext.Provider value={{ getMessage, message, loading }}>
+    <MessageContext.Provider value={{ getMessage, message, loading ,setMessage , sendMessage , deleteMessage}}>
       {children}
     </MessageContext.Provider>
   )
