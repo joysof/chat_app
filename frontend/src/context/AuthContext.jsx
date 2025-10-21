@@ -51,10 +51,13 @@ export const AuhtProvider = ({ children }) => {
       setUser(user)
       const registeredEmail = res.data.data?.email || email
       localStorage.setItem('email', registeredEmail?.trim().toLowerCase())
-      console.log(registeredEmail)
+
+      toast.success(res.data.message)
+
       navigate('/verify-email')
     } catch (error) {
-      console.log(error)
+      const errorMsg = error.response?.data?.message || "something went wrong place try agin "
+      toast.error(errorMsg)
     }
   }
   const logout = async () => {
