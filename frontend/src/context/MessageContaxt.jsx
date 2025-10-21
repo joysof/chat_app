@@ -38,50 +38,57 @@ export const MessageProvider = ({ children, user }) => {
       })
       setMessage(res.data.data)
     } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to fetch messages")
+      toast.error(error.response?.data?.message || 'Failed to fetch messages')
       console.log(error)
     } finally {
       setLoding(false)
     }
   }
 
-  const sendMessage = async(receiverId , text , file) =>{
+  const sendMessage = async (receiverId, text, file) => {
     try {
-        const formData = new FormData()
-        formData.append("reciverId" , receiverId)
-        formData.append("message" , text)
-        if(file) formData.append("file" , file)
-        
-            const res = await axios.post(`${backend_url}/api/v1/message`,
-                formData,{
-                    headers:{
-                         Authorization: `Bearer ${user.token}`,
-            "Content-Type": "multipart/form-data",
-                    }
-                }
-            )
-            if (socket) socket.emit("new-message" , res.data.data)
-                setMessage((prev) => [...prev , res.data.data])
-            toast.success(res.data.message)
+      const formData = new FormData()
+      formData.append('reciverId', receiverId)
+      formData.append('message', text)
+      if (file) formData.append('file', file)
+
+      const res = await axios.post(`${backend_url}/api/v1/message`, formData, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      if (socket)socket.emit('new-message', res.data.data)
+      setMessage((prev) => [...prev, res.data.data])
+      toast.success(res.data.message)
     } catch (error) {
-        toast.error(error.response?.data?.message)
+      toast.error(error.response?.data?.message)
     }
   }
 
-  const deleteMessage = async(messageId) =>{
+  const deleteMessage = async (messageId) => {
     try {
-        const res = axios.delete(`${backend_url}/api/v1/message/${messageId}`,
-            { headers: { Authorization: `Bearer ${user.token}` } }
-        )
-        setMessage((prev) => prev.filter((m) => m._id !== messageId))
-        toast.success(res.data.message || "Message deleted successfully")
+      const res = axios.delete(`${backend_url}/api/v1/message/${messageId}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      setMessage((prev) => prev.filter((m) => m._id !== messageId))
+      toast.success(res.data.message || 'Message deleted successfully')
     } catch (error) {
-        toast.error(error.response?.data?.message || "Tailed to delete message")
+      toast.error(error.response?.data?.message || 'Tailed to delete message')
     }
   }
 
   return (
-    <MessageContext.Provider value={{ getMessage, message, loading ,setMessage , sendMessage , deleteMessage}}>
+    <MessageContext.Provider
+      value={{
+        getMessage,
+        message,
+        loading,
+        setMessage,
+        sendMessage,
+        deleteMessage,
+      }}
+    >
       {children}
     </MessageContext.Provider>
   )

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import assets, { messagesDummyData } from '../assets/assets'
 import { formatMessagetime } from '../lib/utils'
 import { MessageContext } from '../context/MessageContaxt'
@@ -7,22 +7,14 @@ import { AuthContext } from '../context/AuthContext'
 export const ChatContainer = ({selectedUser,setSelectedUser}) => {
   const {user} = useContext(AuthContext)
   const scrollEnd = useRef()
-
-  const {message , getMessage} = useContext(MessageContext)
-
+  const [text , setText] =useState('')
+  const {message , getMessage ,sendMessage} = useContext(MessageContext)
+  const [file , setFile] = useState(null)
   useEffect(() =>{
     if (selectedUser && user) {
       getMessage(user._id , selectedUser._id)      
     }
   },[selectedUser , user])
-
-
-
-
-
-
-
-
 
   useEffect(() => {
   if (scrollEnd.current) {
@@ -30,7 +22,15 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
   }
 }, [message]);
 
-
+  const handleSend = async () =>{
+    if (!text && !file) return 
+      
+     await sendMessage(selectedUser._id, text , file)
+      setText('')
+      setFile(null)
+      
+    
+  }
   return selectedUser? (
     <div className='h-full overflow-scroll relative backdrop-blur-lg flex flex-col'>
     <div >
@@ -48,7 +48,7 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
     {/* chat area  */}
     
     {message.map((msg ,index) =>(
-      <div key={index} className={`flex items-end gap-2 justify-end  overflow-y-auto px-4 pt-4  ${msg.senderId !== user?._id
+      <div key={index} className={`flex items-end gap-2 justify-end  overflow-y-auto px-4 pt-4  ${msg.senderId === user?._id
  && 'flex-row-reverse'}`}>
         {msg.image ? (
           // message img 
@@ -71,11 +71,17 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
       {/* bottom area  */}
     <div className='sticky bottom-0 mt-2 left-0 right-0 flex items-center gap-3 p-3'>
       <div className='flex-1 flex items-center bg-gray-100/12 px-3 rounded-full'>
-        <input className='flex-1 text-sm border-none py-2 rounded-lg outline-none text-white placeholder-gray-400' type="text" placeholder='send a message' />
-        <input type="file" id='image' accept='image/png , image/jpeg' hidden />
+
+
+
+        <input value={text} onChange={(e) => setText(e.target.value)} className='flex-1 text-sm border-none py-2 rounded-lg outline-none text-white placeholder-gray-400' type="text" placeholder='send a message' />
+
+
+
+        <input onChange={(e) =>setFile(e.target.files[0])} type="file" id='image' accept='image/png , image/jpeg' hidden />
         <label htmlFor="image"><img src={assets.gallery_icon} className='w-5 mr-2 cursor-pointer' alt="" /></label>
       </div>
-      <img src={assets.send_button} className='w-7 cursor-pointer' alt="" />
+      <img src={assets.send_button} onClick={handleSend} className='w-7 cursor-pointer' alt="" />
     </div>
     </div>
   ): (
