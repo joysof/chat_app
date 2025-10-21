@@ -32,7 +32,7 @@ export const MessageProvider = ({ children, user }) => {
   const getMessage = async (senderId, receiverId) => {
     setLoding(true)
     try {
-      const res = await axios.get(`${backend_url}/api/message`, {
+      const res = await axios.get(`${backend_url}/api/v1/message`, {
         params: { senderId, receiverId },
         headers: { Authorization: `Bearer ${user.token}` },
       })
@@ -42,6 +42,29 @@ export const MessageProvider = ({ children, user }) => {
       console.log(error)
     } finally {
       setLoding(false)
+    }
+  }
+
+  const sendMessage = async(receiverId , text , file) =>{
+    try {
+        const formData = new FormData()
+        formData.append("reciverId" , receiverId)
+        formData.append("message" , text)
+        if(file) formData.append("file" , file)
+        
+            const res = await axios.post(`${backend_url}/api/v1/message`,
+                formData,{
+                    headers:{
+                         Authorization: `Bearer ${user.token}`,
+            "Content-Type": "multipart/form-data",
+                    }
+                }
+            )
+            if (socket) socket.emit("new-message" , res.data.data)
+                setMessage((prev) => [...prev , res.data.data])
+            toast.success(res.data.message)
+    } catch (error) {
+        toast.error(error.response?.data?.message)
     }
   }
 
