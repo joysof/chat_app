@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { AuthContext } from './AuthContext'
 import axios from 'axios'
 import { io } from 'socket.io-client'
@@ -6,11 +6,12 @@ import { toast } from 'react-toastify'
 
 export const MessageContext = createContext()
 
-export const MessageProvider = ({ children, user }) => {
+export const MessageProvider = ({ children }) => {
   const [message, setMessage] = useState([])
   const [loading, setLoding] = useState(false)
   const [socket, setSocket] = useState(null)
   const backend_url = import.meta.env.VITE_BACKEND_URL
+  const { user } = useContext(AuthContext)
 
   useEffect(() => {
     if (user?.token) {
@@ -44,7 +45,7 @@ export const MessageProvider = ({ children, user }) => {
       setLoding(false)
     }
   }
-
+  console.log("message from messageContext" ,message)
   const sendMessage = async (receiverId, text, file) => {
     try {
       const formData = new FormData()

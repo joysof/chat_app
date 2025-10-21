@@ -4,7 +4,7 @@ import assets from '../assets/assets'
 import { AuthContext } from '../context/AuthContext'
 const Sidebar = ({selectedUser,setSelectedUser}) => {
 const navigate = useNavigate()
-const {logout , user ,users} = useContext(AuthContext)
+const {logout,users} = useContext(AuthContext)
   console.log("all user" ,users)
   return (
     <div className={`bg-[#8185b2]/10 h-full rounded-r-xl overflow-y-scroll text-white ${selectedUser ? 'max-md:hidden' : ''}`}>
