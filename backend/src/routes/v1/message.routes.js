@@ -1,10 +1,11 @@
 const express = require('express')
 const auth = require('../../middlewares/auth')
 const {messageController} = require('../../controllers')
+const upload = require('../../middlewares/fileUpload')('uploads/') 
 
 const messageRoute = express.Router()
 
-messageRoute.post('/' , auth() ,messageController.sendMessage)
+messageRoute.post('/' , auth() ,upload.single('file') ,messageController.sendMessage)
 messageRoute.get('/' , auth() , messageController.getMessage)
 messageRoute.delete('/:id' , auth() , messageController.deleteMessage)
 

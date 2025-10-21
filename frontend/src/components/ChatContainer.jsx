@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import assets, { messagesDummyData } from '../assets/assets'
+
 import { formatMessagetime } from '../lib/utils'
 import { MessageContext } from '../context/MessageContaxt'
 import { AuthContext } from '../context/AuthContext'
-
+import assets from '../assets/assets'
 export const ChatContainer = ({selectedUser,setSelectedUser}) => {
   const {user} = useContext(AuthContext)
   const scrollEnd = useRef()
@@ -13,10 +13,7 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
 
 
 
-  console.log("message from chatContainer " ,message)
-  console.log("getmessage from chatContainer " ,getMessage)
-
-
+console.log(selectedUser)
 
   useEffect(() =>{
     if (selectedUser && user) {
@@ -32,8 +29,7 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
 
   const handleSend = async () =>{
     if (!text && !file) return 
-      
-     await sendMessage(selectedUser._id, text , file)
+     await sendMessage(selectedUser.id || selectedUser._id , text , file)
       setText('')
       setFile(null)
       
@@ -67,7 +63,7 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
         )}
         {/* user profile icon and time  */}
         <div className='text-center text-sm'>
-          <img src={msg.senderId === user._id ? assets.avatar_icon : assets.profile_martin} alt="" className='w-7 rounded-full' />
+          {/* <img src={msg.senderId === user._id ? assets.avatar_icon : assets.profile_martin} alt="" className='w-7 rounded-full' /> */}
           <p className='text-gray-500'>{ formatMessagetime(msg.createdAt)} </p>
         </div>
         

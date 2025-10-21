@@ -4,11 +4,13 @@ const response = require("../config/response")
 const { messageService } = require('../services')
 
 const sendMessage = catchAsync(async(req,res) =>{
+
+
       const senderId = req.user.id 
       const receiverId = req.body.receiverId
       const file = req.file
       const message = req.body.message
-
+      
     const data = await messageService.createMessage(senderId , receiverId ,message, file)
     if (global.io) {
         global.io.to(`romm${receiverId}`).emit("new-message" , data)

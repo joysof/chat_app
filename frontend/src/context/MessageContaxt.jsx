@@ -11,7 +11,7 @@ export const MessageProvider = ({ children }) => {
   const [loading, setLoding] = useState(false)
   const [socket, setSocket] = useState(null)
   const backend_url = import.meta.env.VITE_BACKEND_URL
-  const { user ,token } = useContext(AuthContext)
+  const {token } = useContext(AuthContext)
 
   useEffect(() => {
 
@@ -38,7 +38,7 @@ export const MessageProvider = ({ children }) => {
     try {
       const res = await axios.get(`${backend_url}/api/v1/message`, {
         params: { senderId, receiverId },
-        headers: { Authorization: `Bearer ${user.token}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
       setMessage(res.data.data)
     } catch (error) {
@@ -48,17 +48,19 @@ export const MessageProvider = ({ children }) => {
       setLoding(false)
     }
   }
-  console.log("message from messageContext" ,message)
-  const sendMessage = async (receiverId, text, file) => {
+
+
+
+  const sendMessage = async (receiverId , message, file) => {
+    console.log("reciverId" , receiverId)
     try {
       const formData = new FormData()
-      formData.append('reciverId', receiverId)
-      formData.append('message', text)
+      formData.append('receiverId', receiverId)
+      formData.append('message', message)
       if (file) formData.append('file', file)
-
       const res = await axios.post(`${backend_url}/api/v1/message`, formData, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       })
@@ -73,7 +75,7 @@ export const MessageProvider = ({ children }) => {
   const deleteMessage = async (messageId) => {
     try {
       const res = axios.delete(`${backend_url}/api/v1/message/${messageId}`, {
-        headers: { Authorization: `Bearer ${user.token}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
       setMessage((prev) => prev.filter((m) => m._id !== messageId))
       toast.success(res.data.message || 'Message deleted successfully')
