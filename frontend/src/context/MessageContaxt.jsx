@@ -41,7 +41,7 @@ export const MessageProvider = ({ children }) => {
         params: { senderId, receiverId },
         headers: { Authorization: `Bearer ${token}` },
       })
-      setMessage(res.data.data)
+      setMessage(res.data.data.attributes)
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to fetch messages')
       console.log(error)
@@ -63,7 +63,7 @@ export const MessageProvider = ({ children }) => {
         },
       })
       if (socket)socket.emit('new-message', res.data.data)
-      setMessage((prev) => [...prev, res.data.data])
+      setMessage((prev) => [...prev, res.data.data.attributes])
       toast.success(res.data.message)
     } catch (error) {
       toast.error(error.response?.data?.message)

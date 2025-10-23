@@ -11,7 +11,7 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
   const { message, getMessage, sendMessage } = useContext(MessageContext)
   const [file, setFile] = useState(null)
 
-  console.log('message ', message)
+  console.log('user ', user )
 
   useEffect(() => {
     if (selectedUser && user) {
@@ -60,12 +60,14 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
 
         {/* chat area  */}
 
-        {Array.isArray(message.attributes) &&
-          message.attributes.map((msg, index) => (
+        {Array.isArray(message) &&
+          message.map((msg, index) => (
+            <div key={index}>
             <div
-              key={index}
-              className={`flex items-end gap-2 justify-end  overflow-y-auto px-4 pt-4  ${
-                msg.senderId === user?._id && 'flex-row-reverse'
+            
+              className={`flex items-end gap-2  overflow-y-auto px-4 pt-4  ${
+               msg.senderId && String(msg.senderId) === String(user?.id)
+ ? 'flex-row-reverse justify-end' : ' justify-start'
               }`}
             >
               {msg.image ? (
@@ -78,23 +80,26 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
               ) : (
                 // message text
                 <p
-                  className={`p-2 max-w-[200px] md:text-sm font-light rounded-lg mb-8 break-all bg-violet-500/30 text-white ${
-                    msg.senderId !== user?._id
-                      ? ' rounded-br-none'
-                      : ' rounded-bl-none'
-                  }`}
+                  className={`p-2 max-w-[200px] md:text-sm font-light bg-violet-400/20 rounded-lg mb-8 break-all  text-white ${
+                   String(msg.senderId) === String(user?.id)
+                      ? ' rounded-br-none border text-red-400'
+                      : ' rounded-bl-none border'
+                  }` }
                 >
-                  {msg.message}
+                  {msg.message} {console.log('senderId' , msg.senderId , 'userId' , user.id)}
                 </p>
+               
               )}
               {/* user profile icon and time  */}
-              <div className="text-center text-sm">
+             
+            </div>
+             <div className="text-center mt-[-20px] pt-[-10px] text-sm">
                 {/* <img src={msg.senderId === user._id ? assets.avatar_icon : assets.profile_martin} alt="" className='w-7 rounded-full' /> */}
                 <p className="text-gray-500">
                   {formatMessagetime(msg.createdAt)}{' '}
                 </p>
               </div>
-            </div>
+          </div>
           ))}
 
         <div ref={scrollEnd}></div>
