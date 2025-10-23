@@ -11,15 +11,16 @@ export const ChatContainer = ({selectedUser,setSelectedUser}) => {
   const {message , getMessage ,sendMessage} = useContext(MessageContext)
   const [file , setFile] = useState(null)
 
-
-
-console.log(selectedUser)
-
+console.log("message " , message)
+console.log("user " , user)
+console.log("selectedUser" , selectedUser)
   useEffect(() =>{
+    console.log("get message calling")
     if (selectedUser && user) {
       getMessage(user._id || user.id , selectedUser._id || selectedUser.id)      
+      console.log('get message data paicea')
     }
-  },[selectedUser , user])
+  },[selectedUser , user ])
 
   useEffect(() => {
   if (scrollEnd.current) {

@@ -11,23 +11,32 @@ export const AuhtProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(localStorage.getItem('token') || null)
   const navigate = useNavigate()
-  const [loading, setLoding] = useState(false)
-  const [users ,setUsers] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [users,setUsers] = useState('')
   const backend_url = import.meta.env.VITE_BACKEND_URL
+  console.log("user from auth context"  , user)
 
-  useEffect(() =>{
-    const fetchUsers = async () =>{
-      const token = localStorage.getItem('token')
-      const res = await axios.get(`${backend_url}/api/v1/users`,{
-        headers :{Authorization : `Bearer ${token}`}
-      })
-      setUsers(res.data.data)
 
+  
+
+
+
+useEffect(() =>{ 
+  const fetchUsers = async () =>{ 
+    const token = localStorage.getItem('token') 
+    const savedUser = localStorage.getItem('user')
+    if(savedUser){
+      setUser(JSON.parse(savedUser))
     }
-    fetchUsers()
-  },[])
+    const res = await axios.get(`${backend_url}/api/v1/users`,{
+      headers :{Authorization :` Bearer ${token}`} }) 
+      setUsers(res.data.data) } 
+      fetchUsers() 
+    },[])
+
+
   const login = async (email, password) => {
-    setLoding(true)
+    setLoading(true)
     try {
       const res = await axios.post(`${backend_url}/api/v1/auth/login`, {
         email,
@@ -35,6 +44,9 @@ export const AuhtProvider = ({ children }) => {
       })
     const accessToken = res.data.data.attributes.tokens.access.token
     setToken(accessToken)
+    const logInUser = res.data.data.attributes.user 
+    setUser(logInUser)
+    localStorage.setItem('user' , JSON.stringify(logInUser))
     localStorage.setItem('token', accessToken)
       toast.success(res.data.message || "Login successful")
       navigate('/')
@@ -43,12 +55,12 @@ export const AuhtProvider = ({ children }) => {
         error.response?.data?.message || "Login failed! Please try again.";
       toast.error(errorMsg)
     } finally {
-      setLoding(false)
+      setLoading(false)
     }
   }
 
   const register = async (firstName, lastName, email, password) => {
-    setLoding(true)
+    setLoading(true)
     try {
       const res = await axios.post(`${backend_url}/api/v1/auth/register`, {
         firstName,
@@ -73,6 +85,7 @@ export const AuhtProvider = ({ children }) => {
     setUser(null)
     setToken(null)
     localStorage.removeItem('token')
+    localStorage.removeItem('user')
     navigate('/login')
   }
   return (

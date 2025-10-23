@@ -30,10 +30,13 @@ export const MessageProvider = ({ children }) => {
       setSocket(newSocket)
       return () => newSocket.disconnect()
     }
-  }, [token])
+  }, [token ])
 
   const getMessage = async (senderId, receiverId) => {
+    console.log(receiverId , senderId ," some data")
+
     if(!token) return
+    console.log("token " ,token)
     setLoding(true)
     try {
       const res = await axios.get(`${backend_url}/api/v1/message`, {
@@ -41,6 +44,7 @@ export const MessageProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       setMessage(res.data.data)
+      console.log("reciverId" , receiverId , "senderId" , senderId , res.data.data)
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to fetch messages')
       console.log(error)
@@ -48,8 +52,6 @@ export const MessageProvider = ({ children }) => {
       setLoding(false)
     }
   }
-
-
 
   const sendMessage = async (receiverId , message, file) => {
     console.log("reciverId" , receiverId)
