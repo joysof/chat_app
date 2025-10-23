@@ -14,10 +14,6 @@ export const AuhtProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
   const [users,setUsers] = useState('')
   const backend_url = import.meta.env.VITE_BACKEND_URL
-  console.log("user from auth context"  , user)
-
-
-  
 
 
 
