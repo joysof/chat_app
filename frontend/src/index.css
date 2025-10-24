@@ -1,8 +1,10 @@
+
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
 
 
-@import "tailwindcss";
+
 
 *{
     font-family: "Outfit", sans-serif;
@@ -10,4 +12,16 @@
 
 ::-webkit-scrollbar{
     display: none;
+}
+
+.ownDiv {
+    @apply justify-end text-8xl
+}
+
+.msg-own {
+  @apply rounded-br-non ;
+}
+
+.msg-other {
+  @apply rounded-bl-none ;
 }

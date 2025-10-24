@@ -11,8 +11,6 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
   const { message, getMessage, sendMessage } = useContext(MessageContext)
   const [file, setFile] = useState(null)
 
-  console.log('user ', user )
-
   useEffect(() => {
     if (selectedUser && user) {
       getMessage(user._id || user.id, selectedUser._id || selectedUser.id)
@@ -59,48 +57,47 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
         </div>
 
         {/* chat area  */}
-
+        <p className="text-white"> i am {user.firstName}</p>
         {Array.isArray(message) &&
-          message.map((msg, index) => (
-            <div key={index}>
-            <div
-            
-              className={`flex items-end gap-2  overflow-y-auto px-4 pt-4  ${
-               msg.senderId && String(msg.senderId) === String(user?.id)
- ? 'flex-row-reverse justify-end' : ' justify-start'
-              }`}
-            >
-              {msg.image ? (
-                // message img
-                <img
-                  src={msg.image}
-                  alt=""
-                  className="max-w-[230px] border border-gray-700 rounded-lg overflow-hidden mb-8"
-                />
-              ) : (
-                // message text
-                <p
-                  className={`p-2 max-w-[200px] md:text-sm font-light bg-violet-400/20 rounded-lg mb-8 break-all  text-white ${
-                   String(msg.senderId) === String(user?.id)
-                      ? ' rounded-br-none border text-red-400'
-                      : ' rounded-bl-none border'
-                  }` }
+          message.map((msg, index) => {
+            const isOwnMessage =
+              String(msg.senderId).trim() === String(user?.id).trim()
+            return (
+              <div key={index}> 
+                <div
+                  className={`flex items-end gap-2  overflow-y-auto text-white px-4 pt-4  ${
+                    isOwnMessage
+                      ? 'ownDiv text-right'
+                      : 'notOwnDiv'
+                  }`}
                 >
-                  {msg.message} {console.log('senderId' , msg.senderId , 'userId' , user.id)}
-                </p>
-               
-              )}
-              {/* user profile icon and time  */}
-             
-            </div>
-             <div className="text-center mt-[-20px] pt-[-10px] text-sm">
-                {/* <img src={msg.senderId === user._id ? assets.avatar_icon : assets.profile_martin} alt="" className='w-7 rounded-full' /> */}
-                <p className="text-gray-500">
-                  {formatMessagetime(msg.createdAt)}{' '}
-                </p>
+                  {msg.image ? (
+                    // message img
+                    <img
+                      src={msg.image}
+                      alt=""
+                      className="max-w-[230px] border border-gray-700 rounded-lg overflow-hidden mb-8"
+                    />
+                  ) : (
+                    // message text
+                    <p
+                      className={`p-2 max-w-[200px] md:text-sm font-light bg-violet-400/20 rounded-lg mb-8 break-all text-white border
+    ${isOwnMessage ? 'msg-own' : 'msg-other'}`}
+                    >
+                      {msg.message} {isOwnMessage ? '(You)' : '(Other)'}
+                    </p>
+                  )}
+                  {/* user profile icon and time  */}
+                </div>
+                <div className="text-center mt-[-20px] pt-[-10px] text-sm">
+                  {/* <img src={msg.senderId === user._id ? assets.avatar_icon : assets.profile_martin} alt="" className='w-7 rounded-full' /> */}
+                  <p className="text-gray-500">
+                    {formatMessagetime(msg.createdAt)}{' '}
+                  </p>
+                </div>
               </div>
-          </div>
-          ))}
+            )
+          })}
 
         <div ref={scrollEnd}></div>
       </div>
