@@ -6,7 +6,7 @@ const Sidebar = ({selectedUser,setSelectedUser}) => {
 const navigate = useNavigate()
 const {logout,users} = useContext(AuthContext)
   return (
-    <div className={`bg-[#8185b2]/10 h-full rounded-r-xl overflow-y-scroll text-white ${selectedUser ? 'max-md:hidden' : ''}`}>
+    <div className={`bg-[#8185b2]/10 h-screen overflow-y-auto rounded-r-xl sticky top-0 text-white ${selectedUser ? 'max-md:hidden' : ''}`}>
       <div className='pb-5'>
 
         {/* edit profile and loguot  */}
@@ -23,12 +23,12 @@ const {logout,users} = useContext(AuthContext)
         </div>
 
         {/* search user  */}
-        <div className='bg-[#282142] rounded-full flex items-center gap-2 py-3 px-4 mt-5'>
+        <div className='bg-[#282142] mb-4 rounded-full flex items-center gap-2 py-3 px-4 mt-5'>
           <img src={assets.search_icon} alt="search"  className='w-3'/>
           <input type="text" className='bg-transparent border-none outline-none text-white text-xs placeholder-[#c8c8c8]  flex-1' placeholder='search user'/>
         </div>
 
-        <div className='flex flex-col'>
+        <div className='flex flex-col gap-4'>
           {/* user data  */}
           {Array.isArray(users?.attributes?.results) && users?.attributes?.results.map((user , index) =>(
             <div onClick={() =>{setSelectedUser(user)}} key={index} className= {`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${selectedUser?._id === user._id && 'bg-[#282142]/50'}`}>

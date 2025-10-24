@@ -1,6 +1,6 @@
-
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
 
 
 
@@ -15,11 +15,11 @@
 }
 
 .ownDiv {
-    @apply justify-end text-8xl
+    @apply justify-end
 }
 
 .msg-own {
-  @apply rounded-br-non ;
+  @apply rounded-br-none bg-red-400 ;
 }
 
 .msg-other {

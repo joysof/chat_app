@@ -18,6 +18,13 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
   }, [selectedUser, user])
 
   useEffect(() => {
+  if (scrollEnd.current) {
+    scrollEnd.current.scrollIntoView({ behavior: 'auto' })
+  }
+}, [selectedUser])
+
+
+  useEffect(() => {
     if (scrollEnd.current) {
       scrollEnd.current.scrollIntoView({ behavior: 'smooth' })
     }
@@ -30,10 +37,9 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
     setFile(null)
   }
   return selectedUser ? (
-    <div className="h-full overflow-scroll relative backdrop-blur-lg flex flex-col">
-      <div>
+    <div className=" h-screen relative backdrop-blur-lg flex flex-col">
         {/* hearContent  */}
-        <div className="flex items-center gap-3 mx-4 border-b border-stone-500 ">
+        <div className="sticky flex top-0 z-20 px-4 py-2 border-b border-stone-500 bg-black/60 backdrop-blur-md">
           <img
             src={selectedUser?.image || assets.profile_martin}
             alt=""
@@ -57,15 +63,15 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
         </div>
 
         {/* chat area  */}
-        <p className="text-white"> i am {user.firstName}</p>
-        {Array.isArray(message) &&
+        <div className="flex-1 h-[100vh] overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+          {Array.isArray(message) &&
           message.map((msg, index) => {
             const isOwnMessage =
               String(msg.senderId).trim() === String(user?.id).trim()
             return (
               <div key={index}> 
                 <div
-                  className={`flex items-end gap-2  overflow-y-auto text-white px-4 pt-4  ${
+                  className={`flex items-end gap-2  text-white px-4 pt-4  ${
                     isOwnMessage
                       ? 'ownDiv text-right'
                       : 'notOwnDiv'
@@ -84,7 +90,7 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
                       className={`p-2 max-w-[200px] md:text-sm font-light bg-violet-400/20 rounded-lg mb-8 break-all text-white border
     ${isOwnMessage ? 'msg-own' : 'msg-other'}`}
                     >
-                      {msg.message} {isOwnMessage ? '(You)' : '(Other)'}
+                      {msg.message}
                     </p>
                   )}
                   {/* user profile icon and time  */}
@@ -98,11 +104,12 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
               </div>
             )
           })}
+          <div ref={scrollEnd}></div>
+        </div>
 
-        <div ref={scrollEnd}></div>
-      </div>
+        
       {/* bottom area  */}
-      <div className="sticky bottom-0 mt-2 left-0 right-0 flex items-center gap-3 p-3">
+      <div className="mt-2 sticky bottom-0 left-0 right-0 flex items-center gap-3 p-3">
         <div className="flex-1 flex items-center bg-gray-100/12 px-3 rounded-full">
           <input
             value={text}
