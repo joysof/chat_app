@@ -4,7 +4,7 @@ import assets from '../assets/assets'
 import { AuthContext } from '../context/AuthContext'
 const Sidebar = ({selectedUser,setSelectedUser}) => {
 const navigate = useNavigate()
-const {logout,users} = useContext(AuthContext)
+const {users , logout} = useContext(AuthContext)
   return (
     <div className={`bg-[#8185b2]/10 h-screen overflow-y-auto rounded-r-xl sticky top-0 text-white ${selectedUser ? 'max-md:hidden' : ''}`}>
       <div className='pb-5'>

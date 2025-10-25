@@ -109,7 +109,7 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
 
         
       {/* bottom area  */}
-      <div className="mt-2 sticky bottom-0 left-0 right-0 flex items-center gap-3 p-3">
+      <div className="mt-2 sticky bottom-0 z-50 left-0 right-0 flex items-center gap-3 p-3">
         <div className="flex-1 flex items-center bg-gray-100/12 px-3 rounded-full">
           <input
             value={text}

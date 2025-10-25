@@ -37,7 +37,7 @@ const getMessageBetweenUsers = async(senderId , receiverId)=>{
             {senderId , receiverId},
             {senderId : receiverId , receiverId : senderId},
         ],
-    }).sort({createAt : 1})
+    }).sort({createdAt : 1})
 
     return message
 }
