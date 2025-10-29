@@ -11,17 +11,27 @@ export const MessageProvider = ({ children }) => {
   const [loading, setLoding] = useState(false)
   const [socket, setSocket] = useState(null)
   const backend_url = import.meta.env.VITE_BACKEND_URL
-  const {token } = useContext(AuthContext)
+  const socket_url = import.meta.env.VITE_SOCKET_URL
+  const {token , user } = useContext(AuthContext)
+  const[onlineUsers , setOnlineUsers] = useState([])
 
+  console.log("socket_url" , socket_url)
   useEffect(() => {
-
+    console.log("user context ", user?.id)
     if(!token) return;
     if (token) {
-      const newSocket = io(backend_url, {
+      const newSocket = io(socket_url, {
+        withCredentials: true,
         auth: { token:token },
       })
       newSocket.on('connect', () => {
         console.log('conected to socket server')
+        if(user?.id){
+          newSocket.emit('add-user' , user?.id)
+        }
+      })
+      newSocket.on('get-online-users' , (users) =>{
+        setOnlineUsers(users)
       })
       newSocket.on('new-message', (data) => {
         setMessage((prev) => [...prev, data])
@@ -91,6 +101,7 @@ export const MessageProvider = ({ children }) => {
         setMessage,
         sendMessage,
         deleteMessage,
+        onlineUsers
       }}
     >
       {children}

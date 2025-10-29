@@ -2,9 +2,15 @@ import React, { useContext } from 'react'
 import {useNavigate} from 'react-router-dom'
 import assets from '../assets/assets'
 import { AuthContext } from '../context/AuthContext'
+import { MessageContext } from '../context/MessageContaxt'
+import { useEffect } from 'react'
 const Sidebar = ({selectedUser,setSelectedUser}) => {
 const navigate = useNavigate()
-const {users , logout} = useContext(AuthContext)
+const {users , logout } = useContext(AuthContext)
+const {onlineUsers} = useContext(MessageContext)
+console.log("onliusers" , onlineUsers)
+
+
   return (
     <div className={`bg-[#8185b2]/10 h-screen overflow-y-auto rounded-r-xl sticky top-0 text-white ${selectedUser ? 'max-md:hidden' : ''}`}>
       <div className='pb-5'>
@@ -36,10 +42,12 @@ const {users , logout} = useContext(AuthContext)
               <div className='flex flex-col leading-5'>
                 <p>{user.firstName}{ user.lastName}</p>
                 {
-                index < 3
-                ? <span className='text-green-400 text-sm'>Online</span>
+                
+                onlineUsers?.includes(user.id)
+                ? <span className='text-green-400 text-sm online'>Online</span>
                 : <span className='text-neutral-400'>Offline</span>
                 }
+                
               </div>
               { index > 2 && <p className=' absolute top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500/50'>{index}</p>}
             </div>

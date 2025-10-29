@@ -64,6 +64,7 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
 
         {/* chat area  */}
         <div className="flex-1 h-[100vh] overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+          
           {Array.isArray(message) &&
           message.map((msg, index) => {
             const isOwnMessage =

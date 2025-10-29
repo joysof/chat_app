@@ -18,12 +18,12 @@ export const AuhtProvider = ({ children }) => {
 
 
 useEffect(() =>{ 
-  const fetchUsers = async () =>{ 
-    const token = localStorage.getItem('token') 
-    const savedUser = localStorage.getItem('user')
+ const savedUser = localStorage.getItem('user')
     if(savedUser){
       setUser(JSON.parse(savedUser))
     }
+  const fetchUsers = async () =>{ 
+    const token = localStorage.getItem('token') 
     const res = await axios.get(`${backend_url}/api/v1/users`,{
       headers :{Authorization :` Bearer ${token}`} }) 
       setUsers(res.data.data) } 
@@ -40,9 +40,12 @@ useEffect(() =>{
       })
     const accessToken = res.data.data.attributes.tokens.access.token
     setToken(accessToken)
+
     const logInUser = res.data.data.attributes.user 
     setUser(logInUser)
+
     localStorage.setItem('user' , JSON.stringify(logInUser))
+    
     localStorage.setItem('token', accessToken)
       toast.success(res.data.message || "Login successful")
       navigate('/')
