@@ -40,7 +40,7 @@ export const MessageProvider = ({ children }) => {
       setSocket(newSocket)
       return () => newSocket.disconnect()
     }
-  }, [token ])
+  }, [token ,user?.id])
 
   const getMessage = async (senderId, receiverId) => {
 
