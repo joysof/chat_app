@@ -31,7 +31,13 @@ const socketIO = (io) => {
         console.log("online Users" , Array.from(onlineUsers.keys()))
       }
     })
-
+    socket.on("new-message" , (data) =>{
+      console.log("data" , data , "reciverId" , data.receiverId)
+        const receiverSocketId = onlineUsers.get(data.receiverId)
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("new-message" , data)
+        }
+      })
     socket.on("join-room", (data, callback) => {
       //console.log('someone wants to join--->', data);
       if (data?.roomId) {
@@ -55,6 +61,8 @@ const socketIO = (io) => {
           break;
         }
       }
+
+      
       io.emit("get-online-users", Array.from(onlineUsers.keys()));
       console.log(`ID: ${socket.id} disconnected`);
     });

@@ -8,8 +8,9 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
   const { user } = useContext(AuthContext)
   const scrollEnd = useRef()
   const [text, setText] = useState('')
-  const { message, getMessage, sendMessage } = useContext(MessageContext)
+  const { message, getMessage, sendMessage ,onlineUsers } = useContext(MessageContext)
   const [file, setFile] = useState(null)
+const isUserOnline = selectedUser && onlineUsers?.includes(selectedUser._id || selectedUser.id)
 
   useEffect(() => {
     if (selectedUser && user) {
@@ -47,7 +48,9 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
           />
           <p className="flex-1 text-lg text-white flex items-center gap-2">
             {selectedUser.firstName} {selectedUser.lastName}
-            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+            {
+              isUserOnline && <span className="w-2 h-2 rounded-full bg-green-500"></span> 
+            }
           </p>
           <img
             src={assets.arrow_icon}

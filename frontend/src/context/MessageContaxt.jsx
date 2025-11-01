@@ -34,7 +34,8 @@ export const MessageProvider = ({ children }) => {
         setOnlineUsers(users)
       })
       newSocket.on('new-message', (data) => {
-        setMessage((prev) => [...prev, data])
+        console.log("message data" ,data)
+        setMessage((prev) => [...prev, data.attributes])
         toast.info('new message received')
       })
       setSocket(newSocket)
