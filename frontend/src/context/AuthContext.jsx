@@ -15,7 +15,7 @@ export const AuhtProvider = ({ children }) => {
   const [users,setUsers] = useState('')
   const backend_url = import.meta.env.VITE_BACKEND_URL
 
-
+console.log('backend Url ' , backend_url)
 
 useEffect(() =>{ 
  const savedUser = localStorage.getItem('user')

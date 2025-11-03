@@ -3,7 +3,6 @@ import {useNavigate} from 'react-router-dom'
 import assets from '../assets/assets'
 import { AuthContext } from '../context/AuthContext'
 import { MessageContext } from '../context/MessageContaxt'
-import { useEffect } from 'react'
 const Sidebar = ({selectedUser,setSelectedUser}) => {
 const navigate = useNavigate()
 const {users , logout } = useContext(AuthContext)

@@ -73,8 +73,15 @@ export const MessageProvider = ({ children }) => {
           'Content-Type': 'multipart/form-data',
         },
       })
-      if (socket)socket.emit('new-message', res.data.data)
+
+      
       setMessage((prev) => [...prev, res.data.data.attributes])
+    if (socket && receiverId) {
+      socket.emit("new-message" , {
+        ...res.data.data,
+        receiverId
+      })
+    }
       toast.success(res.data.message)
     } catch (error) {
       toast.error(error.response?.data?.message)
