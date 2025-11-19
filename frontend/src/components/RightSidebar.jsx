@@ -23,7 +23,7 @@ const RightSidebar = ({selectedUser}) => {
         <hr  className='border-[#ffffff50 my-2]'/>
            
            {/* photo section  */}
-        <div className='px-5 text-xs flex-1 '>
+        <div className='px-5 text-xs flex-1 overflow-y-auto'>
           <p>Media</p>
           <div className='mt-2 max-h-[200px] overflow-y-scroll grid grid-cols-2 gap-4 opacity-80'>
             {

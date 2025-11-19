@@ -50,6 +50,8 @@ const deleteMessage = async(messageId) =>{
     await message.deleteOne()
     return message
 }
+
+const sendFile = async ()
 module.exports ={
     createMessage,
     getMessageBetweenUsers,

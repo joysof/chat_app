@@ -8,6 +8,7 @@ const messageRoute = express.Router()
 messageRoute.post('/' , auth() ,upload.single('file') ,messageController.sendMessage)
 messageRoute.get('/' , auth() , messageController.getMessage)
 messageRoute.delete('/:id' , auth() , messageController.deleteMessage)
+messageRoute.post('/file' , auth(),upload.any(), messageController.sendfile)
 
 
 module.exports = messageRoute

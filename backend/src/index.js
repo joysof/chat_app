@@ -17,23 +17,23 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
 
   //initializing socket io
 
-  const socketIo = require("socket.io");
-  const socketIO = require("./utils/socketIO");
-  const socketServer = http.createServer();
-  const io = socketIo(socketServer, {
-    cors: {
-      origin: ["http://localhost:5173", `http://${myIp}:5173`],
-      credentials: true,
-    },
-  });
+  // const socketIo = require("socket.io");
+  // const socketIO = require("./utils/socketIO");
+  // const socketServer = http.createServer();
+  // const io = socketIo(socketServer, {
+  //   cors: {
+  //     origin: ["http://localhost:5173", `http://${myIp}:5173`],
+  //     credentials: true,
+  //   },
+  // });
   
 
-  socketIO(io);
+  // socketIO(io);
 
-  global.io = io;
-  socketServer.listen(config.socketPort, process.env.BACKEND_IP, () => {
-    logger.info(`Socket IO listening to port ${config.socketPort}`);
-  });
+  // global.io = io;
+  // socketServer.listen(config.socketPort, process.env.BACKEND_IP, () => {
+  //   logger.info(`Socket IO listening to port ${config.socketPort}`);
+  // });
 });
 
 const exitHandler = () => {
