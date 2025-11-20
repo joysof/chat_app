@@ -6,7 +6,7 @@ import { MessageContext } from '../context/MessageContaxt'
 const Sidebar = ({selectedUser,setSelectedUser}) => {
 const navigate = useNavigate()
 const {users , logout } = useContext(AuthContext)
-const {onlineUsers , unreadCounts} = useContext(MessageContext)
+const {onlineUsers , unreadCounts , resetUnreadMessage} = useContext(MessageContext)
 const [search , setSearch] = useState('')
   const filterUser = Array.isArray(users?.attributes?.results)? users?.attributes?.results.filter((user) =>(
     `${user.firstName}${user.lastName}`.toLowerCase().includes(search.toLowerCase())
@@ -38,7 +38,7 @@ const [search , setSearch] = useState('')
         <div className='flex flex-col gap-4'>
           {/* user data  */}
           {filterUser.map((user , index) =>(
-            <div onClick={() =>{setSelectedUser(user)}} key={index} className= {`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${selectedUser?._id === user._id && 'bg-[#282142]/50'}`}>
+            <div onClick={() =>{setSelectedUser(user) , resetUnreadMessage(user.id)}} key={index} className= {`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${selectedUser?._id === user._id && 'bg-[#282142]/50'}`}>
               <img src={user.profilePic || assets.avatar_icon } className='w-[35px] aspect-[1/1] rounded-full' alt="" />
               <div className='flex flex-col leading-5'>
                 <p>{user.firstName} { user.lastName}</p>

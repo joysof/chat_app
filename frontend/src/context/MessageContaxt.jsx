@@ -108,6 +108,13 @@ export const MessageProvider = ({ children }) => {
     }
   }
 
+  const resetUnreadMessage = (userId) =>{
+    setUnreadCounts(pre => ({
+      ...pre ,
+      [userId] : 0
+    }))
+  }
+
   return (
     <MessageContext.Provider
       value={{
@@ -118,7 +125,8 @@ export const MessageProvider = ({ children }) => {
         sendMessage,
         deleteMessage,
         onlineUsers,
-        unreadCounts
+        unreadCounts,
+        resetUnreadMessage
       }}
     >
       {children}
