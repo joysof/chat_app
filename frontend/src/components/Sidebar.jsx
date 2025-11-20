@@ -6,15 +6,12 @@ import { MessageContext } from '../context/MessageContaxt'
 const Sidebar = ({selectedUser,setSelectedUser}) => {
 const navigate = useNavigate()
 const {users , logout } = useContext(AuthContext)
-const {onlineUsers} = useContext(MessageContext)
+const {onlineUsers , unreadCounts} = useContext(MessageContext)
 const [search , setSearch] = useState('')
-console.log("users",users)
-console.log("onliusers" , onlineUsers)
-
   const filterUser = Array.isArray(users?.attributes?.results)? users?.attributes?.results.filter((user) =>(
     `${user.firstName}${user.lastName}`.toLowerCase().includes(search.toLowerCase())
   )) : []
-
+  console.log('unread message' , unreadCounts)
   return (
     <div className={`bg-[#8185b2]/10 h-screen overflow-y-auto rounded-r-xl sticky top-0 text-white ${selectedUser ? 'max-md:hidden' : ''}`}>
       <div className='pb-5'>
@@ -44,7 +41,7 @@ console.log("onliusers" , onlineUsers)
             <div onClick={() =>{setSelectedUser(user)}} key={index} className= {`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${selectedUser?._id === user._id && 'bg-[#282142]/50'}`}>
               <img src={user.profilePic || assets.avatar_icon } className='w-[35px] aspect-[1/1] rounded-full' alt="" />
               <div className='flex flex-col leading-5'>
-                <p>{user.firstName}{ user.lastName}</p>
+                <p>{user.firstName} { user.lastName}</p>
                 {
                 
                 onlineUsers?.includes(user.id)
@@ -53,7 +50,14 @@ console.log("onliusers" , onlineUsers)
                 }
                 
               </div>
-              { index > 2 && <p className=' absolute top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500/50'>{index}</p>}
+              {/* unread messag show  */}
+
+            {unreadCounts[user.id] > 0 && (
+            <span className="absolute top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500/50">
+                {unreadCounts[user.id]
+                }
+            </span>
+        )}
             </div>
           ))}
         </div>
@@ -61,5 +65,6 @@ console.log("onliusers" , onlineUsers)
     </div>
   )
 }
+
 
 export default Sidebar

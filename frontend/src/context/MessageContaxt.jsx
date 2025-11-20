@@ -14,6 +14,7 @@ export const MessageProvider = ({ children }) => {
   const socket_url = import.meta.env.VITE_SOCKET_URL
   const {token , user } = useContext(AuthContext)
   const[onlineUsers , setOnlineUsers] = useState([])
+  const [unreadCounts , setUnreadCounts] = useState({})
 
   console.log("socket_url" , socket_url)
   useEffect(() => {
@@ -33,8 +34,15 @@ export const MessageProvider = ({ children }) => {
       newSocket.on('get-online-users' , (users) =>{
         setOnlineUsers(users)
       })
+
       newSocket.on('new-message', (data) => {
         console.log("message data" ,data)
+        const senderId = data.attributes.senderId
+        setUnreadCounts(pre => ({
+          ...pre,
+          [senderId] : (pre[senderId] || 0) + 1
+        }))
+
         setMessage((prev) => [...prev, data.attributes])
         toast.info('new message received')
       })
@@ -109,7 +117,8 @@ export const MessageProvider = ({ children }) => {
         setMessage,
         sendMessage,
         deleteMessage,
-        onlineUsers
+        onlineUsers,
+        unreadCounts
       }}
     >
       {children}
