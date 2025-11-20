@@ -8,9 +8,17 @@ export const ChatContainer = ({ selectedUser, setSelectedUser }) => {
   const { user } = useContext(AuthContext)
   const scrollEnd = useRef()
   const [text, setText] = useState('')
-  const { message, getMessage, sendMessage ,onlineUsers } = useContext(MessageContext)
+  const {
+    message,
+    getMessage,
+    sendMessage,
+    onlineUsers,
+    sendFile,
+    backend_url,
+  } = useContext(MessageContext)
   const [file, setFile] = useState(null)
-const isUserOnline = selectedUser && onlineUsers?.includes(selectedUser._id || selectedUser.id)
+  const isUserOnline =
+    selectedUser && onlineUsers?.includes(selectedUser._id || selectedUser.id)
 
   useEffect(() => {
     if (selectedUser && user) {
@@ -19,11 +27,10 @@ const isUserOnline = selectedUser && onlineUsers?.includes(selectedUser._id || s
   }, [selectedUser, user])
 
   useEffect(() => {
-  if (scrollEnd.current) {
-    scrollEnd.current.scrollIntoView({ behavior: 'auto' })
-  }
-}, [selectedUser])
-
+    if (scrollEnd.current) {
+      scrollEnd.current.scrollIntoView({ behavior: 'auto' })
+    }
+  }, [selectedUser])
 
   useEffect(() => {
     if (scrollEnd.current) {
@@ -39,52 +46,47 @@ const isUserOnline = selectedUser && onlineUsers?.includes(selectedUser._id || s
   }
   return selectedUser ? (
     <div className=" h-screen relative backdrop-blur-lg flex flex-col">
-        {/* hearContent  */}
-        <div className="sticky flex top-0 z-20 px-4 py-2 border-b border-stone-500 bg-black/60 backdrop-blur-md">
-          <img
-            src={selectedUser?.image || assets.profile_martin}
-            alt=""
-            className="w-8 rounded-full"
-          />
-          <p className="flex-1 text-lg text-white flex items-center gap-2">
-            {selectedUser.firstName} {selectedUser.lastName}
-            {
-              isUserOnline && <span className="w-2 h-2 rounded-full bg-green-500"></span> 
-            }
-          </p>
-          <img
-            src={assets.arrow_icon}
-            className=" md:hidden max-w-7"
-            onClick={() => setSelectedUser(null)}
-            alt=""
-          />
-          <img
-            src={assets.help_icon}
-            className="max-md:hidden max-w-5"
-            alt=""
-          />
-        </div>
+      {/* hearContent  */}
+      <div className="sticky flex top-0 z-20 px-4 py-2 border-b border-stone-500 bg-black/60 backdrop-blur-md">
+        <img
+          src={selectedUser?.image || assets.profile_martin}
+          alt=""
+          className="w-8 rounded-full"
+        />
+        <p className="flex-1 text-lg text-white flex items-center gap-2">
+          {selectedUser.firstName} {selectedUser.lastName}
+          {isUserOnline && (
+            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+          )}
+        </p>
+        <img
+          src={assets.arrow_icon}
+          className=" md:hidden max-w-7"
+          onClick={() => setSelectedUser(null)}
+          alt=""
+        />
+        <img src={assets.help_icon} className="max-md:hidden max-w-5" alt="" />
+      </div>
 
-        {/* chat area  */}
-        <div className="flex-1 h-[100vh] overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
-          
-          {Array.isArray(message) &&
+      {/* chat area  */}
+      <div className="flex-1 h-[100vh] overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+        {Array.isArray(message) &&
           message.map((msg, index) => {
             const isOwnMessage =
               String(msg.senderId).trim() === String(user?.id).trim()
             return (
-              <div key={index}> 
+              <div key={index}>
                 <div
                   className={`flex items-end gap-2  text-white px-4 pt-4  ${
-                    isOwnMessage
-                      ? 'ownDiv text-right'
-                      : 'notOwnDiv'
+                    isOwnMessage ? 'ownDiv text-right' : 'notOwnDiv'
                   }`}
                 >
+                  {/* {console.log('imag ', msg)} */}
                   {msg.image ? (
                     // message img
                     <img
-                      src={msg.image}
+                      src={`${backend_url}${msg.file.fileUrl}`}
+                      
                       alt=""
                       className="max-w-[230px] border border-gray-700 rounded-lg overflow-hidden mb-8"
                     />
@@ -94,7 +96,7 @@ const isUserOnline = selectedUser && onlineUsers?.includes(selectedUser._id || s
                       className={`p-2 max-w-[200px] md:text-sm font-light bg-violet-400/20 rounded-lg mb-8 break-all text-white border
     ${isOwnMessage ? 'msg-own' : 'msg-other'}`}
                     >
-                      {msg.message}
+                      {msg.message} {console.log("message" , msg)}
                     </p>
                   )}
                   {/* user profile icon and time  */}
@@ -108,10 +110,9 @@ const isUserOnline = selectedUser && onlineUsers?.includes(selectedUser._id || s
               </div>
             )
           })}
-          <div ref={scrollEnd}></div>
-        </div>
+        <div ref={scrollEnd}></div>
+      </div>
 
-        
       {/* bottom area  */}
       <div className="mt-2 sticky bottom-0 z-50 left-0 right-0 flex items-center gap-3 p-3">
         <div className="flex-1 flex items-center bg-gray-100/12 px-3 rounded-full">
@@ -124,7 +125,7 @@ const isUserOnline = selectedUser && onlineUsers?.includes(selectedUser._id || s
           />
 
           <input
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => sendFile(selectedUser.id, e.target.files[0])}
             type="file"
             id="image"
             accept="image/png , image/jpeg"

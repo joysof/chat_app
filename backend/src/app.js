@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path")
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
@@ -27,7 +28,8 @@ app.use(express.static("public"));
 
 // set security HTTP headers
 app.use(helmet());
-
+// upload file 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // parse json request body
 app.use(express.json());
 

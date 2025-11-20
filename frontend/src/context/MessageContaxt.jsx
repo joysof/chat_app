@@ -115,6 +115,35 @@ export const MessageProvider = ({ children }) => {
     }))
   }
 
+  const sendFile = async (receiverId , file) =>{
+    if (!receiverId) {
+  toast.error("Please select a user to send message");
+  return;
+}
+    if (!file) return
+    const formData = new FormData();
+    formData.append('receiverId' , receiverId);
+    formData.append("file" , file)
+    try {
+      const res = await axios.post(`${backend_url}/api/v1/message/file` , formData ,{
+        headers : {
+          Authorization : `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      setMessage(pre => [...pre , res.data.data.attributes])
+      if (socket) {
+        socket.emit("new-message" , {
+          ...res.data.data,
+          receiverId
+        })
+      }
+      
+    toast.success('File sent successfully');
+    } catch (error) {
+        toast.error(error.response?.data?.message || 'Failed to send file');
+    }
+  }
   return (
     <MessageContext.Provider
       value={{
@@ -126,7 +155,9 @@ export const MessageProvider = ({ children }) => {
         deleteMessage,
         onlineUsers,
         unreadCounts,
-        resetUnreadMessage
+        resetUnreadMessage,
+        sendFile,
+        backend_url
       }}
     >
       {children}
