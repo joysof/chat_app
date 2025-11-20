@@ -59,7 +59,7 @@ const sendFile = async (senderId, receiverId, files) => {
     throw new ApiError(400, 'No file uploaded')
   }
 
- const messages = [];
+  const messages = []
 
   for (const file of files) {
     const msg = await Message.create({
@@ -71,8 +71,8 @@ const sendFile = async (senderId, receiverId, files) => {
         fileType: file.mimetype,
         fileSize: file.size,
       },
-    });
-    messages.push(msg);
+    })
+    messages.push(msg)
   }
   return messages
 }
